@@ -1,0 +1,25 @@
+# ---------- Product Development Notes ----------
+if "formulation_notes" not in st.session_state:
+    st.session_state.formulation_notes = []
+
+st.header("🧪 Product Development Tracker")
+
+with st.form("formulation_form"):
+    new_name = st.text_input("Product Name")
+    new_ingredients = st.text_area("Ingredients & Percentages (e.g., Shea Butter: 25%)")
+    new_benefits = st.text_area("Benefits of the Product")
+    new_cost = st.number_input("Estimated Cost per Product (£)", min_value=0.0, step=0.01)
+    submitted = st.form_submit_button("Add to Tracker")
+    if submitted and new_name:
+        st.session_state.formulation_notes.append({
+            "Name": new_name,
+            "Ingredients": new_ingredients,
+            "Benefits": new_benefits,
+            "Cost": new_cost
+        })
+        st.success(f"Added '{new_name}' to formulation tracker")
+
+if st.session_state.formulation_notes:
+    st.subheader("📋 Tracked Product Ideas")
+    df_notes = pd.DataFrame(st.session_state.formulation_notes)
+    st.dataframe(df_notes)
